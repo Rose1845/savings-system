@@ -15,6 +15,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SavingsProductService {
     private final SavingsProductRepository savingsProductRepository;
+    /**
+     * logic to create a savings product
+     * **/
     public SavingsProductDto createSavingProduct(SavingsProductDto savingsProductDto){
         SavingsProduct savingsProduct = SavingsProductMapper.MAPPER.toEntity(savingsProductDto);
         savingsProduct.setDescription(savingsProductDto.getDescription());
@@ -22,12 +25,21 @@ public class SavingsProductService {
         SavingsProduct savedProduct = savingsProductRepository.save(savingsProduct);
         return SavingsProductMapper.MAPPER.toDto(savedProduct);
     }
+    /**
+     * logic to retrieve all savings product
+     * **/
     public List<SavingsProduct> getAllSavingsProduct(){
         return new ArrayList<>(savingsProductRepository.findAll());
     }
+    /**
+     * logic to retrieve a saving-product a specific savings-products
+     * **/
     public Optional<SavingsProduct> getSavingsProduct(Long id){
         return savingsProductRepository.findById(id);
     }
+    /**
+     * logic to delete specific savings-product
+     * **/
     public String deleteSavingsProduct(Long id){
         savingsProductRepository.deleteById(id);
         return "Savings Product deleted successfully";

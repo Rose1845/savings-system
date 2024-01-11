@@ -20,5 +20,4 @@ public interface TransactionMapper {
     })
     Transaction toEntity(TransactionDto transactionDto);
 
-
 }

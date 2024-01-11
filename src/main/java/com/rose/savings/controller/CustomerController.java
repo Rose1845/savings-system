@@ -4,6 +4,7 @@ import com.rose.savings.model.dto.CustomerDto;
 import com.rose.savings.model.entity.Customer;
 import com.rose.savings.repository.CustomerRepository;
 import com.rose.savings.service.CustomerService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
     @PostMapping
-    public Customer createCustomer(@RequestBody CustomerDto customerDto){
+    public Customer createCustomer(@RequestBody @Valid CustomerDto customerDto){
         return customerService.createCustomer(customerDto);
     }
     @GetMapping

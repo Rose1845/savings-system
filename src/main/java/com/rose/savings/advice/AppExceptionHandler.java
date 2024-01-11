@@ -33,8 +33,6 @@ public class AppExceptionHandler {
         return errorBuilder;
     }
 
-
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(SavingsException.class)
     public Map<String, String> handleValidientException(SavingsException ex) {

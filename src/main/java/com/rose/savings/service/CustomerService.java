@@ -14,6 +14,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerService {
     private final CustomerRepository customerRepository;
+    /**
+     * logic to create a customer
+     * **/
     public Customer createCustomer(CustomerDto customerDto){
         Customer customer = Customer.builder()
                 .email(customerDto.getEmail())
@@ -24,6 +27,9 @@ public class CustomerService {
                 .build();
         return customerRepository.save(customer);
     }
+    /**
+     * logic to retrieve all customers
+     * **/
     public List<Customer> getAllCustomers(){
         return new ArrayList<>(customerRepository.findAll());
 

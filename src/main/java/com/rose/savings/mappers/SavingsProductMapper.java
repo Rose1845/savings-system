@@ -1,8 +1,6 @@
 package com.rose.savings.mappers;
 
-import com.rose.savings.model.dto.CustomerDto;
 import com.rose.savings.model.dto.SavingsProductDto;
-import com.rose.savings.model.entity.Customer;
 import com.rose.savings.model.entity.SavingsProduct;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
