@@ -63,17 +63,11 @@ public class SavingsProductService {
         savingsProductRepository.deleteById(id);
     }
     public SavingsProduct updateSavingsProduct(Long id, SavingsProductDto savingsProductDto) throws SavingsException {
-        Optional<SavingsProduct> savingsProduct = savingsProductRepository.findById(id);
-        if(savingsProduct.isEmpty()){
-            throw SavingsException.builder()
-                    .message("savings with id do not  exist")
-                    .metadata("get savings product")
-                    .build();
-        }
-        SavingsProduct savingsProduct1 = new SavingsProduct();
-        savingsProduct1.setDescription(savingsProductDto.getDescription());
-        savingsProduct1.setName(savingsProductDto.getName());
-        return savingsProductRepository.save(savingsProduct1);
+        SavingsProduct savingsProduct = savingsProductRepository.findById (id).orElseThrow(()->new SavingsException("savings with id do not exists"));
+        savingsProduct.setDescription(savingsProductDto.getDescription());
+        savingsProduct.setName(savingsProductDto.getName());
+//
+        return savingsProductRepository.save(savingsProduct);
 
     }
 
