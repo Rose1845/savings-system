@@ -1,5 +1,6 @@
 package com.rose.savings.service;
 
+import com.rose.savings.advice.SavingsException;
 import com.rose.savings.mappers.TransactionMapper;
 import com.rose.savings.model.dto.TransactionDto;
 import com.rose.savings.model.entity.Customer;
@@ -9,6 +10,7 @@ import com.rose.savings.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +32,6 @@ public class TransactionService {
         customer.ifPresent(transaction::setCustomer);
         Transaction savedTransaction = transactionRepository.save(transaction);
         return TransactionMapper.MAPPER.toDto(savedTransaction);
-
     }
     /**
      * logic to retrieve all transactions
@@ -41,31 +42,49 @@ public class TransactionService {
     /**
      * logic to retrieve a transactions by id
      * **/
-    public Optional<Transaction> getTransactionById(Long id){
+    public Optional<Transaction> getTransactionById(Long id) throws SavingsException {
+        Optional<Transaction> transaction = transactionRepository.findById(id);
+        if(transaction.isEmpty()){
+            throw SavingsException.builder()
+                    .message("transaction do not  exists")
+                    .metadata("get transaction")
+                    .build();
+        }
         return transactionRepository.findById(id);
+
     }
     /**
      * logic to retrieve all transactions for a specific customer
      * **/
-    public List<Transaction> getAllTransactionsByCustomerId(Long customerId) {
+    public List<Transaction> getAllTransactionsByCustomerId(Long customerId) throws SavingsException {
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        if(customer.isEmpty()){
+            throw SavingsException.builder()
+                    .message("customer do not  exists")
+                    .metadata("get customer transaction")
+                    .build();
+        }
         return transactionRepository.findByCustomer_CustomerId(customerId);
     }
-
-
     /**
      * logic to calculate the total savings amount for a specific customer
      * **/
-    public double calculateTotalSavingsAmountByCustomerId(Long customerId) {
+    public double calculateTotalSavingsAmountByCustomerId(Long customerId) throws SavingsException {
+        Optional<Customer> customer = customerRepository.findById(customerId);
+        if(customer.isEmpty()){
+            throw SavingsException.builder()
+                    .message("customer do not  exists")
+                    .metadata("get customer transaction")
+                    .build();
+        }
         List<Transaction> transactions = getAllTransactionsByCustomerId(customerId);
         return transactions.stream().mapToDouble(Transaction::getAmount).sum();
     }
     /**
      *  logic to calculate the total savings amount across all users
      * **/
-
     public double calculateTotalSavingsAmountAcrossAllUsers() {
         List<Transaction> transactions = getAllTransactions();
         return transactions.stream().mapToDouble(Transaction::getAmount).sum();
     }
-
 }

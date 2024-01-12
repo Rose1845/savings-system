@@ -1,10 +1,9 @@
 package com.rose.savings.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -16,10 +15,13 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date;
+    private LocalDateTime date;
     private String paymentMethod;
     private double amount;
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    public Transaction(long id, String s, String mpesa, String number, long l) {
+    }
 }

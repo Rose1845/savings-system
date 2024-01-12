@@ -1,5 +1,6 @@
 package com.rose.savings.service;
 
+import com.rose.savings.advice.SavingsException;
 import com.rose.savings.mappers.SavingsProductMapper;
 import com.rose.savings.model.dto.SavingsProductDto;
 import com.rose.savings.model.entity.SavingsProduct;
@@ -18,7 +19,10 @@ public class SavingsProductService {
     /**
      * logic to create a savings product
      * **/
-    public SavingsProductDto createSavingProduct(SavingsProductDto savingsProductDto){
+    public SavingsProductDto createSavingProduct(SavingsProductDto savingsProductDto) throws SavingsException {
+        if (savingsProductRepository.existsByName(savingsProductDto.getName())) {
+            throw  SavingsException.builder().message("saving product with that name already exists number already in use").metadata("saving product with that name exists").build();
+        }
         SavingsProduct savingsProduct = SavingsProductMapper.MAPPER.toEntity(savingsProductDto);
         savingsProduct.setDescription(savingsProductDto.getDescription());
         savingsProduct.setName(savingsProductDto.getName());
@@ -34,15 +38,47 @@ public class SavingsProductService {
     /**
      * logic to retrieve a saving-product a specific savings-products
      * **/
-    public Optional<SavingsProduct> getSavingsProduct(Long id){
+    public Optional<SavingsProduct> getSavingsProduct(Long id) throws SavingsException {
+        Optional<SavingsProduct> savingsProduct = savingsProductRepository.findById(id);
+        if(savingsProduct.isEmpty()){
+            throw SavingsException.builder()
+                    .message("savings with id do not  exist")
+                    .metadata("get savings product")
+                    .build();
+        }
+
         return savingsProductRepository.findById(id);
     }
     /**
      * logic to delete specific savings-product
-     * **/
-    public String deleteSavingsProduct(Long id){
+     **/
+    public void deleteSavingsProduct(Long id) throws SavingsException {
+        Optional<SavingsProduct> savingsProduct = savingsProductRepository.findById(id);
+        if(savingsProduct.isEmpty()){
+            throw SavingsException.builder()
+                    .message("savings product with id do not  exists")
+                    .metadata("delete transaction")
+                    .build();
+        }
         savingsProductRepository.deleteById(id);
-        return "Savings Product deleted successfully";
+    }
+    public SavingsProduct updateSavingsProduct(Long id, SavingsProductDto savingsProductDto) throws SavingsException {
+        Optional<SavingsProduct> savingsProduct = savingsProductRepository.findById(id);
+        if(savingsProduct.isEmpty()){
+            throw SavingsException.builder()
+                    .message("savings with id do not  exist")
+                    .metadata("get savings product")
+                    .build();
+        }
+        SavingsProduct savingsProduct1 = new SavingsProduct();
+        savingsProduct1.setDescription(savingsProductDto.getDescription());
+        savingsProduct1.setName(savingsProductDto.getName());
+        return savingsProductRepository.save(savingsProduct1);
+
     }
 
+
+    public SavingsProduct updateSavingsProducts(SavingsProduct savingsProduct) {
+        return savingsProductRepository.save(savingsProduct);
+    }
 }

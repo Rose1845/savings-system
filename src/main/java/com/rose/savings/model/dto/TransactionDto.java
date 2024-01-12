@@ -7,15 +7,16 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class TransactionDto {
-    private Date date;
+
+    private LocalDateTime date;
     @NotEmpty
     @NotBlank
     @NotNull
@@ -25,4 +26,6 @@ public class TransactionDto {
     private double amount;
     @NotNull
     private Long customerId;
+
+
 }

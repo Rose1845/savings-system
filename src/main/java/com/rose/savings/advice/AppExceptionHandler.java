@@ -38,7 +38,7 @@ public class AppExceptionHandler {
     public Map<String, String> handleValidientException(SavingsException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage() != null ? ex.getMessage() : "Internal server error");
-        errorMap.put("metadata-info", ex.getMetadata() != null ? ex.getMetadata().toString() : "");
+        errorMap.put("metadata-info", ex.getMetadata() != null ? ex.getMetadata() : "");
         errorMap.put("statusCode", ex.getStatusCode() != null ? ex.getStatusCode().toString() : Integer.valueOf("400").toString());
         return errorMap;
     }

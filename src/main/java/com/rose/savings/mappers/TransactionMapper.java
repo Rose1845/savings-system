@@ -12,11 +12,12 @@ public interface TransactionMapper {
 
     @Mappings({
             @Mapping(target = "customerId", source = "customer.customerId"),
+            @Mapping(target = "date", source = "transaction.date")  // Adjust the date mapping
     })
     TransactionDto toDto(Transaction transaction);
-
     @Mappings({
             @Mapping(target = "customer.customerId", source = "customerId"),
+            @Mapping(target = "date", source = "transactionDto.date")  // Adjust the date mapping
     })
     Transaction toEntity(TransactionDto transactionDto);
 
